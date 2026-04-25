@@ -1,21 +1,13 @@
-#include "puzzles.h"
-#include <stddef.h>
+/*
+ * Pointer Puzzles: Struct Layout Predictions
+ *
+ * Read each struct definition in puzzles.h, mentally work out the
+ * sizeof and offsetof values, then replace -1 with your prediction.
+ *
+ * INCLUDES: You need to include your header and whatever gives you offsetof().
+ */
 
-/* ============================================================
- * YOUR PREDICTIONS
- *
- * Fill in what you think the sizeof and offsetof values are.
- * Then run `make test` to see if you nailed it.
- *
- * Hints:
- *   - On this platform: sizeof(char)=1, sizeof(int)=4,
- *     sizeof(double)=8, sizeof(pointer)=8
- *   - Types align to their own size
- *   - Struct total size rounds up to its largest member's alignment
- *   - Fields are laid out in declaration order (never reordered)
- *
- * Replace each -1 with your prediction.
- * ============================================================ */
+/* TODO: add your #include lines here */
 
 /* struct simple { char a; int b; char c; } */
 int predict_sizeof_simple(void)          { return -1; }

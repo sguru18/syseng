@@ -3,18 +3,19 @@
  *
  * Implement C string functions from scratch and build a simple dynamic array.
  *
- * Key C things you'll use here:
- *
+ * KEY C THINGS YOU'LL USE:
  *   - Null terminator: C strings end with '\0'. Your loops need to check for it.
  *   - malloc(size): allocate `size` bytes on the heap. Returns void*.
  *   - free(ptr): release heap memory. Every malloc needs a matching free.
  *   - realloc(ptr, new_size): resize a heap allocation. May move the data.
- *     Returns the (possibly new) pointer. If ptr is NULL, acts like malloc.
+ *
+ * INCLUDES: You need to write your own #include lines now.
+ *   - You'll need your own header (strings.h)
+ *   - Think about which standard headers provide malloc/free and memcpy.
+ *     (Hint: the README for Module 00 lists the common C headers and what's in them)
  */
 
-#include "strings.h"
-#include <stdlib.h>   // malloc, free, realloc
-#include <string.h>   // you can use memcpy if you want, but not strlen/strcmp/etc.
+/* TODO: add your #include lines here */
 
 size_t my_strlen(const char *s) {
     // TODO: walk the string until you hit '\0', counting characters.
@@ -39,7 +40,7 @@ int my_strcmp(const char *a, const char *b) {
     // TODO: compare character by character.
     //
     // - If you reach a difference, return (unsigned char)*a - (unsigned char)*b
-    //   (casting to unsigned char is the standard way -- it avoids sign issues with chars > 127)
+    //   (casting to unsigned char is the standard way -- avoids sign issues with chars > 127)
     // - If both strings reach '\0' at the same time, they're equal: return 0
     (void)a;
     (void)b;
@@ -118,8 +119,6 @@ void vec_push(int_vec_t *v, int val) {
 
 int vec_pop(int_vec_t *v) {
     // TODO: decrement length, return data[length].
-    //
-    // This is the caller's responsibility to not pop an empty vec.
     (void)v;
     return 0;
 }
@@ -133,7 +132,5 @@ int vec_get(const int_vec_t *v, size_t i) {
 
 void vec_free(int_vec_t *v) {
     // TODO: free(v->data), then zero out the struct.
-    //
-    // Zeroing prevents use-after-free bugs from silently working.
     (void)v;
 }

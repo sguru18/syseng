@@ -2,14 +2,17 @@
  * IEEE 754 Float Bit Surgery
  *
  * Manipulate single-precision floats by operating directly on their
- * 32-bit unsigned integer representation. Each function takes and returns
- * a float_bits (unsigned int) that holds the raw IEEE 754 bit pattern.
+ * 32-bit unsigned integer representation.
  *
  * For special values (NaN, infinity), preserve them or return them unchanged
  * unless the operation specifically transforms them.
+ *
+ * INCLUDES: Figure out what you need.
+ *   You'll need your header. No standard library functions are required --
+ *   this is pure bit manipulation.
  */
 
-#include "float_bits.h"
+/* TODO: add your #include lines here */
 
 #define SIGN_MASK  0x80000000u
 #define EXP_MASK   0x7F800000u
@@ -24,25 +27,19 @@
 float_bits float_negate(float_bits f) {
     unsigned exp  = (f >> EXP_SHIFT) & 0xFF;
     unsigned frac = f & FRAC_MASK;
-    if (exp == 0xFF && frac != 0) return f; /* NaN → unchanged */
+    if (exp == 0xFF && frac != 0) return f;
     return f ^ SIGN_MASK;
 }
 
-/*
- * TODO: Return the absolute value of f (clear the sign bit).
- * NaN should be returned unchanged.
- */
+/* TODO: Return the absolute value of f (clear the sign bit). NaN unchanged. */
 float_bits float_abs(float_bits f) {
     return 0;
 }
 
 /*
- * TODO: Return f × 2.0.
- *
- * Think about what "multiply by 2" means for each category:
- *   - Normalized numbers: what happens to the exponent?
- *   - Denormalized numbers: can you just shift the mantissa?
- *   - Zero, Infinity, NaN: what should these return?
+ * TODO: Return f * 2.0.
+ * Think about what "multiply by 2" means for normalized, denormalized,
+ * zero, infinity, and NaN.
  */
 float_bits float_twice(float_bits f) {
     return 0;
@@ -50,26 +47,14 @@ float_bits float_twice(float_bits f) {
 
 /*
  * TODO: Return f / 2.0.
- *
  * The reverse of float_twice, but watch the boundary where a normalized
  * number becomes denormalized (exponent goes from 1 to 0).
- *
- * Think about:
- *   - Normalized numbers: what happens to the exponent?
- *   - What if the exponent is 1? (the implicit leading bit becomes explicit)
- *   - Denormalized numbers: shift the mantissa, but what about the lowest bit?
- *   - Zero, Infinity, NaN: what should these return?
  */
 float_bits float_half(float_bits f) {
     return 0;
 }
 
-/*
- * TODO: Return 1 if f represents NaN, 0 otherwise.
- *
- * What distinguishes NaN from infinity in the IEEE 754 encoding?
- * Both have exponent = 255, but...
- */
+/* TODO: Return 1 if f represents NaN, 0 otherwise. */
 int float_is_nan(float_bits f) {
     return 0;
 }
@@ -77,15 +62,12 @@ int float_is_nan(float_bits f) {
 /*
  * TODO: Convert a signed 32-bit integer to its IEEE 754 float representation.
  *
- * This is the hardest function. Steps to think about:
- *   1. Handle special case: x == 0
- *   2. Determine the sign, then work with the absolute value
- *   3. Find the position of the most significant 1-bit (this determines the exponent)
- *   4. Shift the value to extract the 23-bit mantissa (removing the implicit leading 1)
- *   5. Handle rounding: when you discard low bits, round to nearest even
- *   6. Pack sign, exponent, and mantissa into the 32-bit result
- *
- * Watch out for INT_MIN (-2147483648): its absolute value doesn't fit in a signed int.
+ * This is the hardest function. Think about:
+ *   - Special case: x == 0
+ *   - Sign handling (watch out for INT_MIN: its abs doesn't fit in a signed int)
+ *   - Finding the most significant 1-bit to determine the exponent
+ *   - Extracting the 23-bit mantissa (minus the implicit leading 1)
+ *   - Rounding: when you discard low bits, round to nearest even
  */
 float_bits int_to_float(int x) {
     return 0;

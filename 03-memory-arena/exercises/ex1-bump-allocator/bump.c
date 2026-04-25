@@ -1,5 +1,12 @@
-#include "bump.h"
-#include <string.h>
+/*
+ * Bump Allocator
+ *
+ * Read bump.h for the interface and the README for how bump allocation works.
+ *
+ * INCLUDES: You know the drill by now.
+ */
+
+/* TODO: add your #include lines here */
 
 void bump_init(bump_allocator_t *a, void *buffer, size_t capacity) {
     a->buffer = (uint8_t *)buffer;
@@ -7,23 +14,9 @@ void bump_init(bump_allocator_t *a, void *buffer, size_t capacity) {
     a->offset = 0;
 }
 
+/* TODO: Allocate size bytes with align-byte alignment. Return NULL if out of space. */
 void *bump_alloc(bump_allocator_t *a, size_t size, size_t align) {
-    // TODO: Allocate `size` bytes with `align`-byte alignment.
-    //
-    // 1. Round up `a->offset` to the next multiple of `align`
-    //    (What's the formula to round up x to the next multiple of a power-of-two n?
-    //     Hint: (x + n - 1) & ~(n - 1))
-    //
-    // 2. Check if there's enough space: aligned_offset + size <= capacity
-    //
-    // 3. Save the aligned offset as the result pointer
-    //
-    // 4. Bump the offset past the allocation: offset = aligned_offset + size
-    //
-    // 5. Return the pointer: buffer + aligned_offset
-    (void)a;
-    (void)size;
-    (void)align;
+    (void)a; (void)size; (void)align;
     return NULL;
 }
 

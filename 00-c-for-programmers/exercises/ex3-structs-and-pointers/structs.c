@@ -1,21 +1,15 @@
 /*
  * Structs and Pointers
  *
- * This file has two parts:
- *   Part 1: A singly-linked list (the fundamental dynamic data structure in C)
- *   Part 2: An "entity" system (the struct + functions pattern used everywhere)
+ * Part 1: A singly-linked list (the fundamental dynamic data structure in C)
+ * Part 2: An "entity" system (the struct + functions pattern used everywhere)
  *
- * Key C concepts you'll practice:
- *   - Heap allocation of structs: malloc(sizeof(ll_node_t))
- *   - Pointer-to-struct access: node->value, node->next
- *   - Passing structs by pointer for mutation
- *   - String copy with strncpy (safe bounded copy)
+ * INCLUDES: Write your own. You'll need:
+ *   - Your header file (structs.h)
+ *   - Headers for: malloc/free, printf/sprintf, strncpy/strlen
  */
 
-#include "structs.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+/* TODO: add your #include lines here */
 
 /* ===== Part 1: Linked List ===== */
 
@@ -27,12 +21,6 @@ void ll_init(linked_list_t *list) {
 void ll_push_front(linked_list_t *list, int value) {
     // TODO: allocate a new node, set its value, point it at the current head,
     //       then update head to the new node. Increment length.
-    //
-    // ll_node_t *node = malloc(sizeof(ll_node_t));
-    // node->value = value;
-    // node->next = list->head;
-    // list->head = node;
-    // list->length++;
     (void)list;
     (void)value;
 }
@@ -42,11 +30,6 @@ void ll_push_back(linked_list_t *list, int value) {
     //       If list is empty, set head to the new node.
     //       Otherwise, walk to the last node and set its next to the new node.
     //       Increment length.
-    //
-    // Walking a linked list:
-    //   ll_node_t *cur = list->head;
-    //   while (cur->next != NULL) { cur = cur->next; }
-    //   // now cur is the last node
     (void)list;
     (void)value;
 }
@@ -79,9 +62,7 @@ int ll_remove(linked_list_t *list, int value) {
     //
     // Tricky part: you need a pointer to the PREVIOUS node so you can
     // update prev->next to skip over the removed node.
-    //
     // Special case: removing the head node (there's no previous).
-    //
     // Don't forget to free() the removed node and decrement length.
     (void)list;
     (void)value;
@@ -92,12 +73,6 @@ void ll_free(linked_list_t *list) {
     // TODO: walk the list and free every node.
     //
     // Careful: save cur->next BEFORE freeing cur!
-    //   ll_node_t *cur = list->head;
-    //   while (cur != NULL) {
-    //       ll_node_t *next = cur->next;
-    //       free(cur);
-    //       cur = next;
-    //   }
     // Then reset head to NULL and length to 0.
     (void)list;
 }
@@ -108,11 +83,8 @@ void entity_init(entity_t *e, const char *name, int x, int y, int max_hp) {
     // TODO: copy name into e->name (use strncpy to avoid overflow).
     //       Set position, hp = max_hp, max_hp, alive = 1.
     //
-    // strncpy(e->name, name, sizeof(e->name) - 1);
-    // e->name[sizeof(e->name) - 1] = '\0';  // ensure null termination
-    //
-    // strncpy does NOT guarantee null termination if src is too long,
-    // so always set the last byte manually. This is a classic C gotcha.
+    // Gotcha: strncpy does NOT guarantee null termination if src is too long.
+    // Always set the last byte manually: e->name[sizeof(e->name) - 1] = '\0';
     (void)e;
     (void)name;
     (void)x;
@@ -142,20 +114,15 @@ void entity_move(entity_t *e, int dx, int dy) {
 }
 
 int entity_distance(const entity_t *a, const entity_t *b) {
-    // TODO: return |a->x - b->x| + |a->y - b->y|
-    //
-    // C has abs() in <stdlib.h>, or you can use ternary: (x < 0) ? -x : x
+    // TODO: return Manhattan distance: |a->x - b->x| + |a->y - b->y|
     (void)a;
     (void)b;
     return 0;
 }
 
 void entity_status(const entity_t *e, char *buf) {
-    // TODO: write the status string into buf using sprintf.
-    //
-    // sprintf(buf, "%s (%d,%d) HP: %d/%d [%s]",
-    //         e->name, e->x, e->y, e->hp, e->max_hp,
-    //         e->alive ? "ALIVE" : "DEAD");
+    // TODO: write status string into buf using sprintf.
+    //       Format: "Name (x,y) HP: hp/max_hp [ALIVE]" or "[DEAD]"
     (void)e;
     (void)buf;
 }
