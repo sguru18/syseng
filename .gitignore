@@ -1,0 +1,19 @@
+**/solutions/
+*.o
+*.dSYM/
+*.out
+.DS_Store
+
+# Test binaries (each exercise builds one)
+**/exercises/**/test_hello_bin
+**/exercises/**/test_strings_bin
+**/exercises/**/test_structs_bin
+**/exercises/**/test_bits_bin
+**/exercises/**/test_float_bits_bin
+**/exercises/**/test_dns_bin
+**/exercises/**/test_puzzles
+**/exercises/**/test_sort
+**/exercises/**/test_backtrace
+**/exercises/**/test_bump
+**/exercises/**/test_freelist
+**/exercises/**/test_pool
