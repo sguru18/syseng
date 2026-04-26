@@ -17,6 +17,10 @@
 
 /* TODO: add your #include lines here */
 
+#include <strings.h>
+#include "strings.h"
+#include <stdlib.h>
+
 size_t my_strlen(const char *s) {
     // TODO: walk the string until you hit '\0', counting characters.
     //
@@ -24,16 +28,26 @@ size_t my_strlen(const char *s) {
     //   const char *p = s;
     //   while (*p != '\0') { ... p++; }
     //   return p - s;   // pointer arithmetic gives you the count
-    (void)s;
-    return 0;
+
+    const char *p = s;
+    while (*p != '\0') {
+        p++;
+    }
+    return p - s;
 }
 
 char *my_strcpy(char *dst, const char *src) {
     // TODO: copy characters from src to dst one by one, including the '\0'.
     //
     // Be careful: you must also copy the null terminator!
-    (void)src;
-    return dst;
+    char *start = dst;
+    while (*src != '\0') {
+        *dst = *src;
+        dst++;
+        src++;
+    }
+    *dst = '\0';
+    return start;
 }
 
 int my_strcmp(const char *a, const char *b) {
@@ -42,9 +56,18 @@ int my_strcmp(const char *a, const char *b) {
     // - If you reach a difference, return (unsigned char)*a - (unsigned char)*b
     //   (casting to unsigned char is the standard way -- avoids sign issues with chars > 127)
     // - If both strings reach '\0' at the same time, they're equal: return 0
-    (void)a;
-    (void)b;
-    return 0;
+    
+    while (*a == *b && *a != '\0') {
+        a++;
+        b++;
+    }
+    // done once they are either not equal or they were equal and are both "\0"
+    if (*a == *b) { 
+        // they are both "\0"
+        return 0;
+    } 
+    // they are not equal, safe to do this because they are both either chars or just "\0" so we can dereference safely
+    return (unsigned char)*a - (unsigned char)*b;
 }
 
 char *my_strcat(char *dst, const char *src) {
@@ -52,7 +75,11 @@ char *my_strcat(char *dst, const char *src) {
     //
     // Hint: you already wrote my_strlen and my_strcpy.
     // You can call your own functions here.
-    (void)src;
+    // (void)src;
+
+    int l = my_strlen(dst);
+    char *loc = dst + l;
+    my_strcpy(loc, src);
     return dst;
 }
 
@@ -65,17 +92,23 @@ char *my_strdup(const char *s) {
     // 4. Return the new pointer
     //
     // The caller is responsible for calling free() on the result.
-    (void)s;
-    return NULL;
+    // (void)s;
+    int len = my_strlen(s);
+    char *dup = malloc((len + 1) * sizeof(char));
+    my_strcpy(dup, s);
+
+    return dup;
 }
 
 char *str_join(const char *a, const char *b) {
     // TODO: allocate a new string that fits both a and b, concatenate them, return it.
     //
     // Length needed: strlen(a) + strlen(b) + 1
-    (void)a;
-    (void)b;
-    return NULL;
+    int len = my_strlen(a) + my_strlen(b) + 1;
+    char *result = malloc(len*sizeof(char));
+    my_strcpy(result, a);
+    my_strcpy(result+my_strlen(a), b); // overwrites the null terminator of a, which is correct
+    return result; 
 }
 
 void str_reverse(char *s) {
