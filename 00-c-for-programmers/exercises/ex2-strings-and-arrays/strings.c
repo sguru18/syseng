@@ -115,16 +115,26 @@ void str_reverse(char *s) {
     // TODO: reverse s in place.
     //
     // Find the length, then swap s[0] with s[len-1], s[1] with s[len-2], etc.
-    (void)s;
+    // (void)s;
+
+    size_t len = my_strlen(s);
+    for (size_t i = 0; i < len / 2; ++i) {
+        char tmp = s[len-1-i];
+        s[len-1-i] = s[i];
+        s[i] = tmp;
+    }
 }
 
 int str_is_palindrome(const char *s) {
     // TODO: return 1 if s reads the same forwards and backwards.
-    //
-    // Hint: you could use str_reverse on a copy, then compare.
-    // Or just compare s[i] with s[len-1-i] directly.
-    (void)s;
-    return 0;
+
+    size_t len = my_strlen(s);
+    for (size_t i = 0, j = len - 1; i < len / 2; ++i){
+        if (s[i] != s[j-i]) {
+            return 0;
+        }
+    }
+    return 1;
 }
 
 /* --- Dynamic integer array (like a very simple std::vector<int>) --- */
