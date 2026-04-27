@@ -141,12 +141,15 @@ int str_is_palindrome(const char *s) {
 
 void vec_init(int_vec_t *v, size_t initial_capacity) {
     // TODO: allocate the data array and set length/capacity.
-    //
-    // v->data = malloc(initial_capacity * sizeof(int));
-    // v->length = 0;
-    // v->capacity = initial_capacity;
-    (void)v;
-    (void)initial_capacity;
+    
+    v->data = malloc(initial_capacity * sizeof(int));
+    if (v->data == NULL) {
+        // free(v->data);
+        vec_free(v);
+        // handle error
+    }
+    v-> length = 0;
+    v-> capacity = initial_capacity;
 }
 
 void vec_push(int_vec_t *v, int val) {
@@ -156,24 +159,45 @@ void vec_push(int_vec_t *v, int val) {
     // realloc(ptr, new_size) resizes the allocation. If it needs to move
     // the data, it copies it for you. Always use the return value:
     //   v->data = realloc(v->data, new_capacity * sizeof(int));
-    (void)v;
-    (void)val;
+    
+    if (v->length == v->capacity) {
+        v->data = realloc(v->data, (v->capacity*2)*sizeof(int));
+        if (v->data == NULL) {
+            // free(v->data);
+            vec_free(v);
+            // handle error
+        }
+        v -> capacity = (v->capacity)*2;
+    }
+
+    v->data[v->length] = val;
+    (v->length)++;
 }
 
 int vec_pop(int_vec_t *v) {
-    // TODO: decrement length, return data[length].
-    (void)v;
-    return 0;
+    
+    if (v->length == 0) {
+        // handle error
+    }
+
+    return v->data[--(v->length)];
 }
 
 int vec_get(const int_vec_t *v, size_t i) {
-    // TODO: return data[i].
-    (void)v;
-    (void)i;
-    return 0;
+
+    // bounds check
+    if (i < 0 || i >= v->length) {
+        // handle error
+    }
+    return v->data[i];
 }
 
 void vec_free(int_vec_t *v) {
-    // TODO: free(v->data), then zero out the struct.
-    (void)v;
+
+    free(v->data);
+    v -> length = 0;
+    v -> capacity = 0;
 }
+
+// think we should change rest of workbook to use a pattern like bool vec_pop(int_vec_t *v, int *out) to 
+// clearly communicate failure. not sure what's professional
