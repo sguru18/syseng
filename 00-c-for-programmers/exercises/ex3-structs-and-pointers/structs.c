@@ -11,6 +11,11 @@
 
 /* TODO: add your #include lines here */
 
+#include "structs.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include "../ex1-hello-c/hello.h"
+
 /* ===== Part 1: Linked List ===== */
 
 void ll_init(linked_list_t *list) {
@@ -21,8 +26,13 @@ void ll_init(linked_list_t *list) {
 void ll_push_front(linked_list_t *list, int value) {
     // TODO: allocate a new node, set its value, point it at the current head,
     //       then update head to the new node. Increment length.
-    (void)list;
-    (void)value;
+    
+    ll_node_t *n = malloc(sizeof(ll_node_t));
+    if (n == NULL) { } // handle error
+    n -> value = value;
+    n -> next = list -> head;
+    list -> head = n;
+    (list -> length)++;
 }
 
 void ll_push_back(linked_list_t *list, int value) {
@@ -30,8 +40,22 @@ void ll_push_back(linked_list_t *list, int value) {
     //       If list is empty, set head to the new node.
     //       Otherwise, walk to the last node and set its next to the new node.
     //       Increment length.
-    (void)list;
-    (void)value;
+    
+    ll_node_t *n = malloc(sizeof(ll_node_t));
+    if (n == NULL) {} // handle error
+    n -> next = NULL;
+    n -> value = value;
+    if (list -> length == 0) {
+        list -> head = n;
+    } else {
+        // walk to the last node and set its next to the new node
+        ll_node_t *cur = list -> head;
+        while (cur -> next) {
+            cur = cur -> next;
+        }
+        cur -> next = n;
+    }
+    list -> length++;
 }
 
 int ll_pop_front(linked_list_t *list) {
@@ -39,22 +63,35 @@ int ll_pop_front(linked_list_t *list) {
     //       free the old head node, decrement length, return the saved value.
     //
     // Important: free the node AFTER reading its value, not before!
-    (void)list;
-    return 0;
+    
+    int val = list->head->value;
+    ll_node_t *cur = list -> head;
+    list -> head = cur -> next;
+    free(cur);
+    list -> length--;
+    return val;
 }
 
 int ll_contains(const linked_list_t *list, int value) {
     // TODO: walk the list, return 1 if you find a node with this value.
-    (void)list;
-    (void)value;
+    
+    ll_node_t *cur = list -> head;
+    while (cur) {
+        if (cur -> value == value) return 1;
+        cur = cur -> next;
+    }
     return 0;
 }
 
 int ll_get(const linked_list_t *list, size_t i) {
     // TODO: walk i steps from head, return that node's value.
-    (void)list;
-    (void)i;
-    return 0;
+    
+    ll_node_t *cur = list -> head;
+    for (size_t steps = 0; steps < i; ++steps) {
+        cur = cur -> next;
+    }
+    if (!cur) {} // handle error
+    return cur -> value;
 }
 
 int ll_remove(linked_list_t *list, int value) {
@@ -64,8 +101,32 @@ int ll_remove(linked_list_t *list, int value) {
     // update prev->next to skip over the removed node.
     // Special case: removing the head node (there's no previous).
     // Don't forget to free() the removed node and decrement length.
-    (void)list;
-    (void)value;
+
+    // make sure safe to check head
+    if (list -> length == 0) {return 0;}
+
+    // handle special case outside of main logic
+    if (list -> head -> value == value) {
+        ll_node_t* old = list -> head;
+        list -> head = old -> next;
+        free(old);
+        list -> length--;
+        return 1; // we don't have to store it from the node because they match obviously
+    }
+
+    ll_node_t *prev = list -> head;
+    ll_node_t *cur = list -> head -> next;
+    while (cur) {
+        if (cur -> value == value) {
+            prev -> next = cur -> next;
+            free(cur);
+            list -> length--;
+            return 1;
+        }
+        prev = cur;
+        cur = cur -> next;
+    }
+
     return 0;
 }
 
@@ -74,7 +135,16 @@ void ll_free(linked_list_t *list) {
     //
     // Careful: save cur->next BEFORE freeing cur!
     // Then reset head to NULL and length to 0.
-    (void)list;
+    
+    ll_node_t *cur = list -> head;
+    while (cur) {
+        ll_node_t *prev = cur;
+        cur = cur -> next;
+        free(prev);
+    }
+
+    list -> head = NULL;
+    list -> length = 0;
 }
 
 /* ===== Part 2: Entity System ===== */
