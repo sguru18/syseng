@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "../ex1-hello-c/hello.h"
+#include <string.h>
 
 /* ===== Part 1: Linked List ===== */
 
@@ -155,44 +156,55 @@ void entity_init(entity_t *e, const char *name, int x, int y, int max_hp) {
     //
     // Gotcha: strncpy does NOT guarantee null termination if src is too long.
     // Always set the last byte manually: e->name[sizeof(e->name) - 1] = '\0';
-    (void)e;
-    (void)name;
-    (void)x;
-    (void)y;
-    (void)max_hp;
+    
+    strncpy(e->name, name, sizeof(e->name)-1);
+    e->name[sizeof(e->name) - 1] = '\0';
+
+    e->hp = max_hp;
+    e->max_hp = max_hp;
+    e->alive = 1;
+    e->x = x;
+    e->y = y;
 }
 
 void entity_take_damage(entity_t *e, int amount) {
     // TODO: subtract amount from hp. Clamp hp to 0 minimum.
     //       If hp reaches 0, set alive = 0.
-    (void)e;
-    (void)amount;
+    
+    e -> hp -= amount;
+    if (e -> hp <= 0) {
+        e -> hp = 0;
+        e -> alive = 0;
+    }
 }
 
 void entity_heal(entity_t *e, int amount) {
     // TODO: if not alive, do nothing. Otherwise add amount to hp.
     //       Clamp hp to max_hp.
-    (void)e;
-    (void)amount;
+    
+    if (e->alive) {
+        e -> hp += amount;
+        if (e -> hp > e->max_hp) { e->hp = e->max_hp; }
+    }
 }
 
 void entity_move(entity_t *e, int dx, int dy) {
     // TODO: add dx to x, dy to y.
-    (void)e;
-    (void)dx;
-    (void)dy;
+    
+    e->x += dx;
+    e->y += dy;
 }
 
 int entity_distance(const entity_t *a, const entity_t *b) {
     // TODO: return Manhattan distance: |a->x - b->x| + |a->y - b->y|
-    (void)a;
-    (void)b;
-    return 0;
+    
+    return (abs(a->x - b->x) + abs(a->y - b->y));
 }
 
 void entity_status(const entity_t *e, char *buf) {
     // TODO: write status string into buf using sprintf.
     //       Format: "Name (x,y) HP: hp/max_hp [ALIVE]" or "[DEAD]"
-    (void)e;
-    (void)buf;
+    
+    if (e->alive) { sprintf(buf, "%s (%d,%d) HP: %d/%d [ALIVE]", e->name, e->x, e->y, e->hp, e->max_hp); }
+    else { sprintf(buf, "%s (%d,%d) HP: %d/%d [DEAD]", e->name, e->x, e->y, e->hp, e->max_hp); }
 }
