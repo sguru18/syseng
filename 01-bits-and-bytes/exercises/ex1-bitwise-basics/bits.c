@@ -20,6 +20,7 @@
  */
 
 /* TODO: add your #include lines here */
+#include <stdlib.h>
 
 /*
  * Example: return x & y
@@ -31,7 +32,14 @@ int bit_and(int x, int y) {
 
 /* TODO: Return -x without using the unary minus operator. */
 int bit_negate(int x) {
-    return 0;
+    // what the flip
+    // so all 1s represents -1
+    // 0 is 00000000... so ~0 flips these into all 1s which is -1
+    // so ~x = (2^n - 1) which is all 1s and then - x bc flipping everything
+    // and then ~x + 1 = 2^n - 1 - x + 1 = 2^n - x
+    // and 2^n - x = -x because numbers are stored mod 2^n (when it wraps around) so 2^n is actually 0
+    // wow this is cool  
+    return ~x + 1;
 }
 
 /* TODO: Return the absolute value of x. */
