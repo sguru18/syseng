@@ -44,7 +44,13 @@ int bit_negate(int x) {
 
 /* TODO: Return the absolute value of x. */
 int bit_abs(int x) {
-    return 0;
+    // wow took me much longer than i thought it would but figured it out
+    // pretty cool
+    // thought is that x >> 31 is either 11111111 or 00000000 
+    // XOR with x gives you positive version but if it was neg it's off by 1
+    // but 11111111 = -1 so -11111111 adds 1 and -00000000 doesn't change obvi
+    // don't fully understand right shift yet though
+    return (x ^ (x >> 31)) - (x >> 31);
 }
 
 /* TODO: Return 1 if x is a positive power of 2 (1, 2, 4, 8, ...), else 0. */
