@@ -50,12 +50,16 @@ int bit_abs(int x) {
     // XOR with x gives you positive version but if it was neg it's off by 1
     // but 11111111 = -1 so -11111111 adds 1 and -00000000 doesn't change obvi
     // don't fully understand right shift yet though
-    return (x ^ (x >> 31)) - (x >> 31);
+    // return (x ^ (x >> 31)) - (x >> 31);
+    return (~x & (x >> 31)) | (x & ~(x >> 31));
 }
 
 /* TODO: Return 1 if x is a positive power of 2 (1, 2, 4, 8, ...), else 0. */
 int is_power_of_2(int x) {
+    // x >> 31 gives the mask 00000000 or 11111111
+    // if it is a power of two then binary will be 000000010000 all 0s except a 1
     return 0;
+    
 }
 
 /* TODO: Return 1 if x + y does NOT overflow (signed 32-bit), else 0. */
@@ -65,7 +69,9 @@ int add_ok(int x, int y) {
 
 /* TODO: Return 1 if x is negative, else 0. */
 int is_negative(int x) {
-    return 0;
+    // think we should get the mask which is 0 for pos or -1 for neg
+    // negative of that is 0 for pos or 1 for neg nice
+    return ~(x >> 31) + 1;
 }
 
 /* TODO: If x is nonzero, return y; otherwise return z. No branching! */
