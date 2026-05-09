@@ -141,5 +141,22 @@ int conditional(int x, int y, int z) {
 int bit_count(int x) {
     // can be used to solve power of 2
     // the mask is 00000000 for 0_______ or 11111111 for 1_______
-    // 
+    // i dont need the mask here do i
+    // says naive needs 32 shifts
+    // just check if rightmost bit is 1 and sum
+    return (x & 1) + ((x >> 1) & 1) + ((x >> 2) & 1) + ((x >> 3) & 1) + ((x >> 4) & 1) + ((x >> 5) & 1) + ((x >> 6) & 1) + ((x >> 7) & 1) +
+    ((x >> 8) & 1) + ((x >> 9) & 1) + ((x >> 10) & 1) + ((x >> 11) & 1) + ((x >> 12) & 1) + ((x >> 13) & 1) + ((x >> 14) & 1) + ((x >> 15) & 1) + 
+    ((x >> 16) & 1) + ((x >> 17) & 1) + ((x >> 18) & 1) + ((x >> 19) & 1) + ((x >> 20) & 1) + ((x >> 21) & 1) + ((x >> 22) & 1) + ((x >> 23) & 1) +
+    ((x >> 24) & 1) + ((x >> 25) & 1) + ((x >> 26) & 1) + ((x >> 27) & 1) + ((x >> 28) & 1) +
+    ((x >> 29) & 1) + ((x >> 30) & 1) + ((x >> 31) & 1);
+    // lol
+
+    // hint says count in parallel and log(n) means number of swaps left to do halves each time
+    // intuitively i think the shift values would then be >> 31 >> 15 >> 7 >> 3 >> 1 or something
+    // recursive????
+    // oh count in parallel yeah
+    // lets see
+    // i have no if statement to handle base case though so probably not
+
+    // ok hit the google divide and conquer approach is very cool but not inuitive to me yet
 }
