@@ -50,16 +50,44 @@ int bit_abs(int x) {
     // XOR with x gives you positive version but if it was neg it's off by 1
     // but 11111111 = -1 so -11111111 adds 1 and -00000000 doesn't change obvi
     // don't fully understand right shift yet though
-    // return (x ^ (x >> 31)) - (x >> 31);
-    return (~x & (x >> 31)) | (x & ~(x >> 31));
+    return (x ^ (x >> 31)) - (x >> 31);
+    // matthew's idea something like this
+    // return (~x & (x >> 31)) | (x & ~(x >> 31));
 }
 
 /* TODO: Return 1 if x is a positive power of 2 (1, 2, 4, 8, ...), else 0. */
 int is_power_of_2(int x) {
     // x >> 31 gives the mask 00000000 or 11111111
     // if it is a power of two then binary will be 000000010000 all 0s except a 1
-    return 0;
-    
+    // how to count the number of 1s 
+    // there is a function later to count number of one bits
+    // oh wait we can clear the lowest set bit which has to make it all 0s
+    // so (x & (x-1)) should be 00000000 if true but we want 1 
+    // so then plus 1?
+    // this doesn't get 0 for a negative number though
+    // or what about minus the negative
+    // that would make a negative 0 and still add 1 here
+    // return (x & (x-1)) - (~x + 1);
+    // wait negative of what 
+    // 0100 -> 0000 - (~0000 >> 31) = 0 + 1 = 1 correct
+    // 1010 -> 1000 - (~1000 >> 31) = 1000 - 0000 = 1000 er nvm
+
+    // ((x & (x-1)) - ~(x & (x-1))) - ((x & (x-1)) - ~(x & (x-1)) >> 31);
+    // holy moly wrote out a lot of stuff and tried different combos of operations 
+    // to try to match expected output values
+    // last step would not be necessary if i could output 1 / -1 
+    // actually that accepts negative numbers like -7
+    // oh lmao i messed up the formula
+    // need to use bitabs
+    // can i use variables?
+
+    // finally used claude for help after third session still not yielding progress
+    // very helpful iea to split into clauses like this
+    int v = x & (x-1);
+    int not_zero = (x | (~x+1)) >> 31;  // -1 if x!=0, 0 if x==0
+    int not_neg = ~(x >> 31);            // -1 if x>=0, 0 if x<0
+    int v_zero = ~((v | (~v+1)) >> 31); // -1 if v==0, 0 if v!=0
+    return v_zero & not_zero & not_neg & 1;
 }
 
 /* TODO: Return 1 if x + y does NOT overflow (signed 32-bit), else 0. */
@@ -81,5 +109,7 @@ int conditional(int x, int y, int z) {
 
 /* TODO: Return the number of 1-bits in x (population count). */
 int bit_count(int x) {
-    return 0;
+    // can be used to solve power of 2
+    // the mask is 00000000 for 0_______ or 11111111 for 1_______
+    // 
 }
