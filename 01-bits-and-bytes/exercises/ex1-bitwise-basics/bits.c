@@ -81,8 +81,8 @@ int is_power_of_2(int x) {
     // need to use bitabs
     // can i use variables?
 
-    // finally used claude for help after third session still not yielding progress
-    // very helpful iea to split into clauses like this
+    // finally used claude for help after third sitting
+    // ohhhh very helpful idea to split into clauses 
     int v = x & (x-1);
     int not_zero = (x | (~x+1)) >> 31;  // -1 if x!=0, 0 if x==0
     int not_neg = ~(x >> 31);            // -1 if x>=0, 0 if x<0
@@ -93,6 +93,7 @@ int is_power_of_2(int x) {
 /* TODO: Return 1 if x + y does NOT overflow (signed 32-bit), else 0. */
 int add_ok(int x, int y) {
     return 0;
+    // 
 }
 
 /* TODO: Return 1 if x is negative, else 0. */
@@ -104,7 +105,36 @@ int is_negative(int x) {
 
 /* TODO: If x is nonzero, return y; otherwise return z. No branching! */
 int conditional(int x, int y, int z) {
-    return 0;
+    // from is power of 2
+    int non_zero = (x | (~x+1)) >> 31; // 0 iff x == 0, else -1
+    // if non_zero, return y can be achieved by | y because 0 | y = y
+    // if zero, return z can be achieved by 1111 suppose z = 0101 & right yes keeps only set bits from z
+    // so have to make both use & or both use |
+    // 0000 | 0101 = 0101
+    // 1111 & 1001 = 1001
+    //
+    // 0000 ^ 0101 = 0101 good
+    // 1111 ^ 1001 = 0110 bad
+
+    // wait a minute no branching means need to use y and z in the expression regardless 
+    // non_zero & y, non_zero & z always 0 if x is 0
+    // so non_zero & y + non_zero & z + z gives z correctly
+
+    // non_zero & y = y, non_zero & z = z if it is non_zero
+    // so non_zero & y + non_zero & z - z gives y
+
+    // these expressions are very similar to each other
+    // oh what if i use the negated mask
+
+    // so non_zero & y + non_zero & z + (~non_zero & z) gives z correctly if zero
+    // and non_zero & y + non_zero & z + (~non_zero & z) gives y + z this isn't it
+
+    // what about non_zero & y + non_zero & z + (~non_zero & z) - non_zero & z = y + z - 0 - z = y
+    // and if 0 then non_zero & y + non_zero & z + (~non_zero & z) - non_zero & z = 0 + 0 + z - 0 = z
+    // no way
+
+    return (non_zero & y) + (non_zero & z) + ((~non_zero) & z) - (non_zero & z);
+    // yippee
 }
 
 /* TODO: Return the number of 1-bits in x (population count). */
