@@ -90,17 +90,19 @@ int is_power_of_2(int x) {
     return v_zero & not_zero & not_neg & 1;
 }
 
-/* TODO: Return 1 if x + y does NOT overflow (signed 32-bit), else 0. */
-int add_ok(int x, int y) {
-    return 0;
-    // 
-}
-
 /* TODO: Return 1 if x is negative, else 0. */
 int is_negative(int x) {
     // think we should get the mask which is 0 for pos or -1 for neg
     // negative of that is 0 for pos or 1 for neg nice
     return ~(x >> 31) + 1;
+}
+
+/* TODO: Return 1 if x + y does NOT overflow (signed 32-bit), else 0. */
+int add_ok(int x, int y) {
+    // claude to help recognize that this must mean inputs have same sign 
+    // AND output has opposite sign
+    return ~(is_negative(x) ^ is_negative(y)) & ~(is_negative(x) ^ is_negative(x+y)) & 1;
+    // close but not quite, progress
 }
 
 /* TODO: If x is nonzero, return y; otherwise return z. No branching! */
