@@ -21,6 +21,7 @@
 
 /* TODO: add your #include lines here */
 #include <stdlib.h>
+#include <stdio.h>
 
 /*
  * Example: return x & y
@@ -101,9 +102,15 @@ int is_negative(int x) {
 int add_ok(int x, int y) {
     // claude to help recognize that this must mean inputs have same sign 
     // AND output has opposite sign
-    return ~(is_negative(x) ^ is_negative(y)) & ~(is_negative(x) ^ is_negative(x+y)) & 1;
+    // return ~(is_negative(x) ^ is_negative(y)) & ~(is_negative(x) ^ is_negative(x+y)) & 1;
     // close but not quite, progress
-}
+    int inputs_different_sign = is_negative(x) ^ is_negative(y);
+    int inputs_same_sign = bit_abs(~inputs_different_sign); // 0 or 1, needs to be 1
+    int output_opposite_sign = is_negative(x+y) ^ is_negative(x); // 0 or 1, needs to be 1
+    // printf("hello %d\n", inputs_same_sign);
+    // printf("hello2 %d\n", output_opposite_sign);
+    return bit_abs((inputs_same_sign & output_opposite_sign)-1);
+}   
 
 /* TODO: If x is nonzero, return y; otherwise return z. No branching! */
 int conditional(int x, int y, int z) {
