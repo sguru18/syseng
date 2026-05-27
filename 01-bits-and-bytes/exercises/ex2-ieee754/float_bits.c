@@ -13,6 +13,7 @@
  */
 
 /* TODO: add your #include lines here */
+#include "float_bits.h"
 
 #define SIGN_MASK  0x80000000u
 #define EXP_MASK   0x7F800000u
@@ -33,7 +34,14 @@ float_bits float_negate(float_bits f) {
 
 /* TODO: Return the absolute value of f (clear the sign bit). NaN unchanged. */
 float_bits float_abs(float_bits f) {
-    return 0;
+    // f is something like 1 10000000 10010010000111111011011
+    // the sign bit is the very first one
+    // i can and it with 0 to make sure the first one becomes 0
+    // but i have to preserve the rest
+    // what if i and with 0 11111111 11111111111...
+    // whatever was 0 will stay 0, whatever was 1 will stay 1
+    // use hex
+    return f & 0x7FFFFFFF;
 }
 
 /*
