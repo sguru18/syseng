@@ -50,7 +50,28 @@ float_bits float_abs(float_bits f) {
  * zero, infinity, and NaN.
  */
 float_bits float_twice(float_bits f) {
-    return 0;
+    // return 0;
+    // need to increment the exponent by 1 
+    // this is done by left shifting from the mantissa for denorm
+    // the mantissa is at the end anyway so use f << 1
+    // preserve sign bit though
+    int exponent = (f & 0x7F800000) >> 23;
+    if (exponent == 0) { // denormalized and 0
+        int is_negative = f & 0x80000000; // 0x80000000 is sign bit is 1
+        f = f << 1; // multiply the rest by 2
+        f = f & 0x7FFFFFFF; // get rid of sign bit
+        f = f | is_negative;
+        return f;
+    } else if (exponent == 0xFF) {
+        return f;
+    } else {
+        exponent += 1;
+        exponent = exponent << 23;
+        f = f & ~0x7F800000; // clear the bits of the exponent 
+        f = f | exponent; // put the new exponent in
+        return f;
+    }
+    // this was actually very cool
 }
 
 /*
