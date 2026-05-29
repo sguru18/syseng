@@ -71,7 +71,7 @@ float_bits float_twice(float_bits f) {
         f = f | exponent; // put the new exponent in
         return f;
     }
-    // this was actually very cool
+    // this was actually very cool 
 }
 
 /*
@@ -80,7 +80,31 @@ float_bits float_twice(float_bits f) {
  * number becomes denormalized (exponent goes from 1 to 0).
  */
 float_bits float_half(float_bits f) {
-    return 0;
+    // so we want to decrement the exponent by 1
+    // if exponent was already 0 then we want to rightshift the mantissa
+    // then the sign bit might move into the second bit which should be 0
+    // so store the sign bit as above and replace it 
+    // and make sure second bit is 0
+    // i think the normalized -> denormalized boundary is handled by rightshift
+    // because 1 goes into the mantissa and exponent is 0
+    int exponent = (f & 0x7F800000) >> 23;
+    if (exponent == 0) {
+        int is_negative = f & 0x80000000; // 0x80000000 if negative else 0
+        f = f >> 1;
+        f = f & 0x7FFFFFFF; // get rid of sign bit
+        f = f & 0xBFFFFFFF; // make sure the second bit is 0
+        f = f | is_negative; // restore correct sign bit
+        return f;
+    } else if (exponent == 0xFF) {
+        return f; // infinity and NaN stay the same I think
+    } else {
+        // rightshift exponent 
+        exponent = exponent - 1;
+        exponent = exponent << 23;
+        f = f & (~0x7F800000); // clear the sign bits in f
+        f = f | exponent; // put the updated exponent in
+        return f;
+    }
 }
 
 /* TODO: Return 1 if f represents NaN, 0 otherwise. */
