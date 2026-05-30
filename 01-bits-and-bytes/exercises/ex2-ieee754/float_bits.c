@@ -109,7 +109,10 @@ float_bits float_half(float_bits f) {
 
 /* TODO: Return 1 if f represents NaN, 0 otherwise. */
 int float_is_nan(float_bits f) {
-    return 0;
+    // NaN means exponent = FF and mantissa != 0
+    int exponent = (f & 0x7F800000) >> 23;
+    int mantissa = (f & 0x007FFFFF);
+    return ((exponent == 0xFF) && (mantissa != 0));
 }
 
 /*
