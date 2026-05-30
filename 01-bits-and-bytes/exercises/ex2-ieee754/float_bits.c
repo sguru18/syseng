@@ -126,5 +126,10 @@ int float_is_nan(float_bits f) {
  *   - Rounding: when you discard low bits, round to nearest even
  */
 float_bits int_to_float(int x) {
-    return 0;
+    int is_negative = x & 0x80000000; // 1 if negative else 0
+    int exponent = (x & 0x7F800000) >> 23;
+    exponent -= 127;
+    int mantissa = (x & 0x007FFFFF);
+    // mantissa is currently 1.____________₂
+    // so shift it by exponent and then binary to base 10
 }
