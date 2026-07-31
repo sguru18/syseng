@@ -11,7 +11,9 @@ A mismatched price and quantity is a billion-dollar bug. Strong types catch thes
 
 ## By the end of this exercise...
 
-You'll have a compile-time firewall against the most common class of trading bugs. You'll be able to answer: *"How do you prevent a price from being passed where a quantity is expected?"* -- and show real C++ code that enforces it.
+You'll have a compile-time firewall against the most common class of trading bugs. You'll be able to answer: _"How do you prevent a price from being passed where a quantity is expected?"_ -- and show real C++ code that enforces it.
+
+Answer: Use strongly typed wrappers, ie. structs. always use explicit for the constructors, and define new operators.
 
 ## Build & Test
 

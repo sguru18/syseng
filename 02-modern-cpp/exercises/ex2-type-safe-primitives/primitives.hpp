@@ -14,39 +14,41 @@
 //   - Price + Quantity must NOT compile (just don't define that operator).
 // ─────────────────────────────────────────────────────────────────────────────
 struct Price {
-    explicit Price(int64_t v = 0) : v_(0) { /* TODO: store v */ }
+    explicit Price(int64_t v = 0) : v_(0) { 
+        this -> v_ = v;
+    }
 
-    int64_t value() const { return 0; /* TODO: return v_ */ }
+    int64_t value() const { return this -> v_; }
 
-    Price operator+(Price other) const { return Price{}; /* TODO */ }
-    Price operator-(Price other) const { return Price{}; /* TODO */ }
+    Price operator+(Price other) const { return Price(this -> v_ + other.v_); }
+    Price operator-(Price other) const { return Price{this -> v_ - other.v_}; }
 
-    bool operator==(Price other) const { return false; /* TODO */ }
-    bool operator!=(Price other) const { return false; /* TODO */ }
-    bool operator< (Price other) const { return false; /* TODO */ }
-    bool operator> (Price other) const { return false; /* TODO */ }
-    bool operator<=(Price other) const { return false; /* TODO */ }
-    bool operator>=(Price other) const { return false; /* TODO */ }
+    bool operator==(Price other) const { return (this -> v_ == other.v_); }
+    bool operator!=(Price other) const { return (this -> v_ != other.v_); }
+    bool operator< (Price other) const { return (this -> v_ < other.v_); }
+    bool operator> (Price other) const { return (this -> v_ > other.v_); }
+    bool operator<=(Price other) const { return (this -> v_ <= other.v_); }
+    bool operator>=(Price other) const { return (this -> v_ >= other.v_); }
 
 private:
     int64_t v_;
 };
 
 struct Quantity {
-    explicit Quantity(int64_t v = 0) : v_(0) { /* TODO: store v */ }
+    explicit Quantity(int64_t v = 0) : v_(0) { this -> v_ = v; }
 
-    int64_t value() const { return 0; /* TODO: return v_ */ }
+    int64_t value() const { return this -> v_; }
 
-    Quantity operator+(Quantity other)  const { return Quantity{}; /* TODO */ }
-    Quantity operator-(Quantity other)  const { return Quantity{}; /* TODO */ }
-    Quantity operator*(int64_t scale)   const { return Quantity{}; /* TODO */ }
+    Quantity operator+(Quantity other)  const { return Quantity{this -> v_ + other.v_}; }
+    Quantity operator-(Quantity other)  const { return Quantity{this -> v_ - other.v_}; }
+    Quantity operator*(int64_t scale)   const { return Quantity{this -> v_ * scale}; }
 
-    bool operator==(Quantity other) const { return false; /* TODO */ }
-    bool operator!=(Quantity other) const { return false; /* TODO */ }
-    bool operator< (Quantity other) const { return false; /* TODO */ }
-    bool operator> (Quantity other) const { return false; /* TODO */ }
-    bool operator<=(Quantity other) const { return false; /* TODO */ }
-    bool operator>=(Quantity other) const { return false; /* TODO */ }
+    bool operator==(Quantity other) const { return (this -> v_ == other.v_); }
+    bool operator!=(Quantity other) const { return (this -> v_ != other.v_); }
+    bool operator< (Quantity other) const { return (this -> v_ < other.v_); }
+    bool operator> (Quantity other) const { return (this -> v_ > other.v_); }
+    bool operator<=(Quantity other) const { return (this -> v_ <= other.v_); }
+    bool operator>=(Quantity other) const { return (this -> v_ >= other.v_); }
 
 private:
     int64_t v_;
@@ -65,11 +67,11 @@ private:
 enum class Side { Buy, Sell };
 
 inline Side opposite(Side s) {
-    return s; /* TODO: return the other side */
+    return (s == Side::Buy) ? Side::Sell : Side::Buy;
 }
 
 inline const char* side_str(Side s) {
-    return ""; /* TODO: return "Buy" or "Sell" */
+    return (s == Side::Buy) ? "Buy" : "Sell";
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -81,9 +83,8 @@ struct Order {
     Quantity qty;
     Side     side;
 
-    // TODO: initialize all members from the arguments
     Order(uint64_t id_, Price p_, Quantity q_, Side s_)
-        : id(0), price{}, qty{}, side(Side::Buy) {}
+        : id(id_), price{p_}, qty{q_}, side{s_} {}
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -101,8 +102,24 @@ constexpr Symbol SYMBOL_TABLE[] = {
 };
 constexpr int NUM_SYMBOLS = static_cast<int>(sizeof(SYMBOL_TABLE) / sizeof(SYMBOL_TABLE[0]));
 
-// TODO: linear search -- compare name against each SYMBOL_TABLE entry character
-// by character (no strcmp in constexpr before C++20; write your own loop).
+
 constexpr int symbol_id(const char* name) {
-    return -1; /* TODO */
+    const char* start = name;
+    for (const auto s : SYMBOL_TABLE) {
+        const char* ticker = s.name;
+        int id = s.id;
+        
+        // compare ticker and name
+        while (*ticker != 0 && *name != 0 && *ticker == *name) {
+            ++ticker;
+            ++name;
+        }
+
+        if (*ticker == 0 && *name == 0) {
+            return id;
+        }
+
+        name = start;
+    }
+    return -1;
 }

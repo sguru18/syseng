@@ -10,22 +10,79 @@
 class Buffer {
 public:
     // Allocate `size` bytes, zero them.
-    explicit Buffer(size_t size) : data_(nullptr), size_(0) { /* TODO */ }
+    explicit Buffer(size_t size) : data_(nullptr), size_(0) { 
+        this -> data_ = new uint8_t[size]{};
+        this -> size_ = size;
+    }
 
     // Deep copy: allocate new memory, copy bytes. Increment s_copies_.
-    Buffer(const Buffer& other) : data_(nullptr), size_(0) { /* TODO */ }
+    Buffer(const Buffer& other) : data_(nullptr), size_(0) { 
+        this -> data_ = new uint8_t[other.size_]{};
+        this -> size_ = other.size_;
+
+        size_t num = 0;
+        uint8_t* ptr = this -> data_;
+        uint8_t* ptr2 = other.data_;
+        while (num++ < other.size_) {
+            *ptr = *ptr2;
+            ptr++;
+            ptr2++;
+        }
+
+        this -> s_copies_ += 1;
+    }
 
     // Copy assign: release current, deep copy from other. Increment s_copies_.
-    Buffer& operator=(const Buffer& other) { /* TODO */ return *this; }
+    Buffer& operator=(const Buffer& other) { 
+        delete[] this -> data_;
+
+        this -> data_ = new uint8_t[other.size_]{};
+        this -> size_ = other.size_;
+        
+        size_t num = 0;
+        uint8_t* ptr = this -> data_;
+        uint8_t* ptr2 = other.data_;
+        while (num++ < other.size_) {
+            *ptr = *ptr2;
+            ptr++;
+            ptr2++;
+        }
+
+        this -> s_copies_ += 1;
+
+        return *this; 
+    }
 
     // Move: steal data_ and size_ from other, set other to nullptr/0. Increment s_moves_.
-    Buffer(Buffer&& other) noexcept : data_(nullptr), size_(0) { /* TODO */ }
+    Buffer(Buffer&& other) noexcept : data_(nullptr), size_(0) { 
+        this -> data_ = other.data_;
+        this -> size_ = other.size_;
+
+        other.data_ = nullptr;
+        other.size_ = 0;
+
+        this -> s_moves_ += 1;
+    }
 
     // Move assign: release current, steal from other. Increment s_moves_.
-    Buffer& operator=(Buffer&& other) noexcept { /* TODO */ return *this; }
+    Buffer& operator=(Buffer&& other) noexcept { 
+        delete[] this -> data_;
+
+        this -> data_ = other.data_;
+        this -> size_ = other.size_;
+
+        other.data_ = nullptr;
+        other.size_ = 0;
+
+        this -> s_moves_ += 1;
+        
+        return *this; 
+    }
 
     // Release owned memory.
-    ~Buffer() { /* TODO: delete[] data_ */ }
+    ~Buffer() { 
+        delete[] this -> data_;
+    }
 
     size_t         size()        const { return size_; }
     uint8_t*       data()              { return data_; }
