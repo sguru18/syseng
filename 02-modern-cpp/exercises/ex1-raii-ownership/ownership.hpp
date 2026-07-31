@@ -90,14 +90,38 @@ private:
 template<typename T>
 class UniqueBuffer {
 public:
-    explicit UniqueBuffer(size_t n) : data_(nullptr), size_(0) { /* TODO: allocate, set size_ */ }
-    ~UniqueBuffer() { /* TODO: delete[] data_ */ }
+    explicit UniqueBuffer(size_t n) : data_(nullptr), size_(0) { 
+        this -> size_ = n;
+        this -> data_ = new T[n];
+    }
+    ~UniqueBuffer() { 
+        delete[] this -> data_;
+    }
 
     UniqueBuffer(const UniqueBuffer&)            = delete;
     UniqueBuffer& operator=(const UniqueBuffer&) = delete;
 
-    UniqueBuffer(UniqueBuffer&& other) noexcept : data_(nullptr), size_(0) { /* TODO: steal, null source */ }
-    UniqueBuffer& operator=(UniqueBuffer&& other) noexcept { /* TODO: free, steal, null source */ return *this; }
+    UniqueBuffer(UniqueBuffer&& other) noexcept : data_(nullptr), size_(0) { 
+        // steal, null source
+        this -> size_ = other.size_;
+        this -> data_ = other.data_;
+
+        other.size_ = 0;
+        other.data_ = nullptr;
+    }
+
+    UniqueBuffer& operator=(UniqueBuffer&& other) noexcept { 
+        // free, steal, null source
+        delete[] this -> data_;
+
+        this -> size_ = other.size_;
+        this -> data_ = other.data_;
+
+        other.size_ = 0;
+        other.data_ = nullptr;
+
+        return *this; 
+    }
 
     T*       data()              { return data_; }
     const T* data()        const { return data_; }

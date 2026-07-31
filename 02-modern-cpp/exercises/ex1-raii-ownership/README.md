@@ -12,7 +12,7 @@ RAII = resource lifetime tied to object lifetime. No manual cleanup. This is why
 
 You'll know exactly when destructors run, why copying resource handles is dangerous, and how `std::unique_ptr` works internally. You'll be able to answer the interview question: _"What is RAII and why does it matter for correctness?"_
 
-Answer:
+Answer: RAII stands for resource acquisition is initialization, which is a resource management paradigm that couples a stack object's lifetime to the lifetime of a resource it possesses (ie. memory). The main benefit of this is the guarantee that once the stack object's lifetime has ended (gone out of scope, stack unwind, etc.), any resources it posessed have also been properly cleaned up. This prevents myriad bugs like double free resulting from improper owner cleanup. Practically, it means you'll never really write plain new/delete pairs in your own code outside of RAII wrapper classes.
 
 ## Build & Test
 
