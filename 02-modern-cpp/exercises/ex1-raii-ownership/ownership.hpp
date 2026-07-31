@@ -149,14 +149,14 @@ public:
     // std::forward<F> is perfect forwarding, essentially keeps fn as a lambda, function pointer,
     // or whatever else it was when it was passed in without copying
     explicit ScopeGuard(F&& fn) : fn_(std::forward<F>(fn)), active_(true) {}
-    ~ScopeGuard() { /* TODO: if (active_) fn_() */ }
+    ~ScopeGuard() { if (this -> active_) fn_(); }
 
     ScopeGuard(const ScopeGuard&)            = delete;
     ScopeGuard& operator=(const ScopeGuard&) = delete;
     ScopeGuard(ScopeGuard&&)                 = delete;
     ScopeGuard& operator=(ScopeGuard&&)      = delete;
 
-    void dismiss() { /* TODO: active_ = false */ }
+    void dismiss() { this -> active_ = false; }
 
 private:
     F    fn_;
@@ -165,6 +165,14 @@ private:
 
 // Factory: C++17 mandatory copy elision means this works even though ScopeGuard
 // is non-movable -- the prvalue is constructed directly in the caller.
+
+// this is needed because you can't call the constructor above because you don't know what type F is because of the lambda
+// in C++17 and newer you can just omit the type and compiler will deduce but this is explicit
+// the scopeguard is actually extremely simple implementation but such a powerful idea
+
+// cool that the scopeguard's scope and the object's scope are different, the callback runs when the guard goes out of scope
+// not the object itself. so you can have a db object, set up a scopeguard to do some risky work, and then have the db outlive
+// the scopeguard for more work afterward. very cool.
 template<typename F>
 ScopeGuard<F> make_scope_guard(F&& fn) {
     return ScopeGuard<F>(std::forward<F>(fn));
