@@ -1,4 +1,6 @@
-MODULES := 00-c-for-programmers 01-bits-and-bytes 02-c-under-the-hood 03-memory-arena
+MODULES := 00-c-for-programmers 01-bits-and-bytes \
+           02-modern-cpp 03-stl-internals 04-cache-and-memory \
+           05-concurrency 06-order-book 07-networking
 
 .PHONY: test-all clean-all list
 
@@ -8,7 +10,7 @@ test-all:
 		echo "========================================"; \
 		echo "  Testing $$mod"; \
 		echo "========================================"; \
-		$(MAKE) -C $$mod test || true; \
+		$(MAKE) -C $$mod test 2>/dev/null || true; \
 	done
 
 clean-all:
@@ -19,6 +21,4 @@ clean-all:
 
 list:
 	@echo "Available modules:"
-	@for mod in $(MODULES); do \
-		echo "  $$mod"; \
-	done
+	@for mod in $(MODULES); do echo "  $$mod"; done

@@ -4,7 +4,7 @@
 *.out
 .DS_Store
 
-# Test binaries (each exercise builds one)
+# C test binaries (module 00-01)
 **/exercises/**/test_hello_bin
 **/exercises/**/test_strings_bin
 **/exercises/**/test_structs_bin
@@ -17,3 +17,8 @@
 **/exercises/**/test_bump
 **/exercises/**/test_freelist
 **/exercises/**/test_pool
+
+# C++ binaries (modules 02-07)
+**/exercises/**/*_bin
+**/exercises/**/bench_*_bin
+**/exercises/**/server_bin
