@@ -1,5 +1,6 @@
 CXX      = clang++
-CXXFLAGS = -std=c++17 -Wall -Wextra -O2 -g -I../../../tools
+BOOST_INC = /opt/homebrew/include
+CXXFLAGS = -std=c++17 -Wall -Wextra -O2 -g -I../../../tools -I$(BOOST_INC)
 TARGET   = bench_containers_bin
 
 all: $(TARGET)
